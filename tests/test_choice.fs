@@ -3,7 +3,7 @@ module Tests.test_choice
 open System
 open Xunit
 
-module C = FSharpPlus.Choice
+module C = FSharpPlus.ChoiceC
 module OUnit=
   let inline assert_equal expected actual=Assert.Same (expected, actual)
 

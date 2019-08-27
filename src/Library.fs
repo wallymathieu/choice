@@ -1,4 +1,4 @@
-﻿module FSharpPlus.Choice
+﻿module FSharpPlus.ChoiceC
 (*
 Copyright (c) 2013, Simon Cruanes
 All rights reserved.
@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     success continuation, and a failure continuation
     (SKFT is Success Failure Kontinuation) *)
 
-type Choice<'a,'b> = {
+type ChoiceC<'a,'b> = {
   skf : sk<'a,'b> -> fk<'b> -> 'b //'b. ('a, 'b)
 }
 (** Success continuation *)
@@ -92,7 +92,7 @@ let reflect opt =
 (* msplit operator, the base for other combinators. It returns
     the first solution, if any. *)
 //(a : 'a t) : ('a * 'a t) option t
-let msplit (a : Choice<'a,_>) : Choice<('a* Choice<'a,_>) option, _>=
+let msplit (a : ChoiceC<'a,_>) : ChoiceC<('a* ChoiceC<'a,_>) option, _>=
   a.skf
     (fun x fk -> Return (Some (x, fk () >>= reflect)))
     (fun () -> Return None)
@@ -261,7 +261,7 @@ let guard = function
   | false -> fail
 
 module Enum = struct
-  type t<'a,'b> = Choice<item<'a,'b>,'b>
+  type t<'a,'b> = ChoiceC<item<'a,'b>,'b>
 
   and item<'a,'b> =
     | End
@@ -359,7 +359,8 @@ module List = struct
   let _end() = Return Enum.End
 
   (* choose element among [t]. [rest] is elements not to choose from *)
-  let rec choose_first rest t = match t with
+  let rec choose_first rest t = 
+    match t with
     | Empty ->
       begin match rest with
         | Empty -> _end()
