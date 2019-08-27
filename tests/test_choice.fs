@@ -5,7 +5,7 @@ open Xunit
 
 module C = FSharpPlus.ChoiceC
 module OUnit=
-  let inline assert_equal expected actual=Assert.Same (expected, actual)
+  let inline assert_equal (expected:'a) (actual:'a)=Assert.Equal<'a> (expected, actual)
 
 let (>>=) x f = C.bind f x
 
